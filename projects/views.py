@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView
 
 from .models import Project, Task
 from .forms import TaskForm
@@ -57,3 +57,16 @@ class ProjectCreateView(CreateView):
     fields = ["name","description"]
     template_name = 'projects/project_create_form.html'
     success_url = reverse_lazy('projects')
+
+class ProjectUpdateView(UpdateView):
+    model = Project
+    template_name = 'projects/project_update_form.html'
+    fields = ["name","description"]
+    success_url = reverse_lazy('projects')
+
+
+class TaskUpdateView(UpdateView):
+    model = Task
+    template_name = 'projects/task_update_form.html'
+    fields = ["title","description","project","assignee","due_date","status"]
+    success_url = reverse_lazy('tasks')

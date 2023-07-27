@@ -21,7 +21,7 @@
                        <th scope="col">Status</th>
                        <th scope="col">Due Date</th>
                        <th scope="col">Project</th>
-                       <!-- <th scope="col">Actions</th> -->
+                       <th scope="col">Actions</th>
                     </tr>
                  </thead>
                  {% for task in user_tasks %}
@@ -46,10 +46,10 @@
                        <td class="border-0 align-middle">
                           <h6 class="mb-0"><span class="badge bg-success">{{task.project}}</span></h6>
                        </td>
-                       <!-- <td class="border-0 align-middle">
-                          <a href="" data-mdb-toggle="tooltip" title="Done"><i
+                       <td class="border-0 align-middle">
+                          <a href="{% url 'update-task' task.id%}" data-mdb-toggle="tooltip" title="Done"><i
                              class="fas fa-check fa-lg text-success me-3">Mark Complete / Update</i></a>
-                       </td> -->
+                       </td>
                     </tr>
                     {% endfor %}
                  </tbody>
