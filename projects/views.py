@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
 
 from .models import Project, Task
+from .forms import TaskForm
 
 
 def home(request):
@@ -35,3 +38,22 @@ def taskDetail(request,pk):
     task = get_object_or_404(Task, id=pk)
     context = {'task':task}
     return render(request, 'projects/task-detail.html',context)
+
+
+def taskCreate(request):
+   form = TaskForm
+   if request.method == "POST":
+       form =TaskForm(request.POST)
+       if form.is_valid():
+           form.save()
+           return redirect('tasks')
+        
+   context = {'form':form}
+   return render(request, 'projects/task-create.html',context)
+
+
+class ProjectCreateView(CreateView):
+    model = Project
+    fields = ["name","description"]
+    template_name = 'projects/project_create_form.html'
+    success_url = reverse_lazy('projects')
