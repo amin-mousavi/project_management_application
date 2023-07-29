@@ -52,6 +52,13 @@ def taskCreate(request):
    return render(request, 'projects/task-create.html',context)
 
 
+def joinTask(request,pk):
+   task =Task.objects.get(id=pk)
+   task.assignee=request.user
+   task.save()
+   return redirect('tasks')
+
+
 class ProjectCreateView(CreateView):
     model = Project
     fields = ["name","description"]
