@@ -2,15 +2,14 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Task
 from .forms import TaskForm
 
 
-def home(request):
-    return render(request, 'index.html')
-
-
+@login_required
 def projectList(request):
    projects = Project.objects.all()
    
@@ -18,6 +17,7 @@ def projectList(request):
    return render(request, 'projects/projects.html',context)
 
 
+@login_required
 def projectDetail(request,pk):
    project = get_object_or_404(Project, id=pk)
    project_tasks = project.task_set.all()
@@ -26,6 +26,7 @@ def projectDetail(request,pk):
    return render(request, 'projects/project-detail.html',context)
 
 
+@login_required
 def taskList(request):
     user_tasks =Task.objects.filter(assignee=request.user)
     tasks = Task.objects.filter(assignee=None)
@@ -34,12 +35,14 @@ def taskList(request):
     return render(request, 'projects/tasks.html',context)
 
 
+@login_required
 def taskDetail(request,pk):
     task = get_object_or_404(Task, id=pk)
     context = {'task':task}
     return render(request, 'projects/task-detail.html',context)
 
 
+@login_required
 def taskCreate(request):
    form = TaskForm
    if request.method == "POST":
@@ -52,6 +55,7 @@ def taskCreate(request):
    return render(request, 'projects/task-create.html',context)
 
 
+@login_required
 def joinTask(request,pk):
    task =Task.objects.get(id=pk)
    task.assignee=request.user
@@ -59,32 +63,32 @@ def joinTask(request,pk):
    return redirect('tasks')
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     fields = ["name","description"]
     template_name = 'projects/project_create_form.html'
     success_url = reverse_lazy('projects')
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     template_name = 'projects/project_update_form.html'
     fields = ["name","description"]
     success_url = reverse_lazy('projects')
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     template_name = 'projects/task_update_form.html'
     fields = ["title","description","project","assignee","due_date","status"]
     success_url = reverse_lazy('tasks')
     
 
-class ProjectDeleteView(DeleteView):
+class ProjectDeleteView(LoginRequiredMixin, DeleteView):
    model = Project
    template_name = 'projects/project_confirm_delete.html'
    success_url = reverse_lazy('projects')
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(LoginRequiredMixin, DeleteView):
    model = Task
    template_name = 'projects/task_confirm_delete.html'
    success_url = reverse_lazy('tasks')
