@@ -29,11 +29,16 @@ def logout_user(request):
 
 @login_required
 def update_profile(request):
+    user = request.user
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=request.user.profile)
         if form.is_valid():
+            user.email = request.POST.get('email')
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.save()
             form.save()
-            return redirect('tasks')
+            return redirect('update-profile')
     
     else:
         form = ProfileForm(instance=request.user.profile)
