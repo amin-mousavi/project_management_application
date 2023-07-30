@@ -133,3 +133,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'tasks'
 LOGIN_URL = 'login'
+
+
+# Base url to serve media files
+MEDIA_URL = '/media/'
+# Path where media is stored'
+MEDIA_ROOT = BASE_DIR / 'media'

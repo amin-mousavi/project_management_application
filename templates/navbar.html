@@ -22,6 +22,7 @@
             </li>
          </ul>
       </div>
+      <a class="btn btn-primary" href="{% url 'update-profile' %}" role="button">Profile</a>
       <a class="btn btn-primary" href="{% url 'logout' %}" role="button">Logout</a>
       {% else %}
       <a class="btn btn-primary" href="{% url 'register' %}" role="button">Sign Up</a>
